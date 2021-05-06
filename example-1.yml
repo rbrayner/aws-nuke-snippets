@@ -1,0 +1,63 @@
+regions:
+- us-east-1
+- global
+​
+account-blocklist:
+- "999999999999" # production
+​
+resource-types:
+  # nuke these resources only
+  targets:
+  - S3Bucket
+​
+​
+accounts:
+  "ROOTACCOUNTID_1_NUMBER": 
+    presets:
+    - "by-time"
+    - "by-tag"
+    - "by-env"
+    - "by-name"
+  # "ROOTACCOUNTID_2_NUMBER": 
+  #   presets:
+  #   - "by-time"
+  #   - "by-tag"
+​
+presets:
+  by-tag:
+    filters:
+      S3Bucket:
+      - property: tag:nuke
+        type: exact
+        value: "true"
+        invert: true
+  by-name:
+    filters:
+      S3Bucket:
+      - property: 'Name'
+        type: exact
+        value: "my-bucket-myenv"
+        invert: true
+  by-env:
+    filters:
+      S3Bucket:
+      - property: 'Name'
+        type: glob
+        value: "*-myenv"
+        invert: true
+  by-time:
+    filters:
+      S3Bucket:
+      - property: 'tag:expiration-date'
+        type: dateOlderThan
+        value: 2h
+
+
+
+
+
+
+
+
+
+
